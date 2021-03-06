@@ -10,6 +10,7 @@ namespace LiveSplit.UnrealLoads.Games
 		public override HashSet<string> GameNames => new HashSet<string>
 		{
 			"Splinter Cell",
+			"Tom Clancy's Splinter Cell"
 		};
 
 		public override HashSet<string> ProcessNames => new HashSet<string>
@@ -17,7 +18,7 @@ namespace LiveSplit.UnrealLoads.Games
 			"splintercell"
 		};
 
-		public override HashSet<string> Maps => new HashSet<string>
+		public override HashSet<string> Maps => new HashSet<string>(StringComparer.OrdinalIgnoreCase)
 		{
 			"0_0_2_training",
 			"0_0_3_training",
