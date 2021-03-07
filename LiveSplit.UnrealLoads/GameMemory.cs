@@ -147,18 +147,15 @@ namespace LiveSplit.UnrealLoads
 
 							Debug.WriteLine($"Map changed to {_map.Current}, Type: {extension}");
 
-							if (Game.Maps.Count == 0 || Game.Maps.Contains(mapname))
+							if (Game.MapExtension == null ||
+							extension.Equals(Game.MapExtension, StringComparison.OrdinalIgnoreCase))
 							{
-								if (Game.MapExtension == null ||
-									extension.Equals(Game.MapExtension, StringComparison.OrdinalIgnoreCase))
-								{
-									prevMap = map;
-									map = mapname;
+								prevMap = map;
+								map = mapname;
 
-									_uiThread.Post(d => OnMapChange?.Invoke(this, prevMap, map), null);
+								_uiThread.Post(d => OnMapChange?.Invoke(this, prevMap, map), null);
 
-									Debug.WriteLine("[NoLoads] Map is changing from \"{0}\" to \"{1}\" - {2}", prevMap, map, frameCounter);
-								}
+								Debug.WriteLine("[NoLoads] Map is changing from \"{0}\" to \"{1}\" - {2}", prevMap, map, frameCounter);
 							}
 						}
 

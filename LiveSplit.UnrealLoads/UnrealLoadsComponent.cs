@@ -32,7 +32,7 @@ namespace LiveSplit.UnrealLoads
 
 			_state = state;
 			_timer = new TimerModel { CurrentState = state };
-			_splitHistory = new HashSet<string>();
+			_splitHistory = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
 			Settings = new UnrealLoadsSettings(_state);
 
@@ -64,9 +64,6 @@ namespace LiveSplit.UnrealLoads
 		{
 			if (Settings.AutoSplitOnMapChange)
 			{
-				prevMap = prevMap.ToLower();
-				nextMap = nextMap.ToLower();
-
 				var shouldSplit = false;
 				if (Settings.Maps.Count == 0)
 					shouldSplit = true;
@@ -106,7 +103,7 @@ namespace LiveSplit.UnrealLoads
 
 		bool ShouldSplitMap(string mapName)
 		{
-			return !Settings.AutoSplitOncePerMap || !_splitHistory.Contains(mapName, StringComparer.OrdinalIgnoreCase);
+			return !Settings.AutoSplitOncePerMap || !_splitHistory.Contains(mapName);
 		}
 
 		public override void Dispose()
