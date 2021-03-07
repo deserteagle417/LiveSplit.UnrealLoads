@@ -38,12 +38,12 @@ namespace LiveSplit.UnrealLoads.Games
 
 		public override TimerAction[] OnMapLoad(MemoryWatcherList watchers)
 		{
-			var status = (MemoryWatcher<int>)watchers["status"];
+			var status = (MemoryWatcher<Status>)watchers["status"];
 			_map = (StringWatcher)watchers["map"];
 
 
 
-			if (status.Current == (int)Status.LoadingMap)
+			if (status.Current == Status.LoadingMap)
 			{
 				if (_map.Current.ToLower() == "mf-warehouse")
 					return new TimerAction[] { TimerAction.Start };

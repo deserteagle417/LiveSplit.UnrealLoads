@@ -69,19 +69,19 @@ namespace LiveSplit.UnrealLoads.Games
 
 		public override TimerAction[] OnUpdate(Process game, MemoryWatcherList watchers)
 		{
-			var status = (MemoryWatcher<int>)watchers["status"];
+			var status = (MemoryWatcher<Status>)watchers["status"];
 			_map = (StringWatcher)watchers["map"];
 
 			if(status.Changed)
 			{
 				var map = Path.GetFileNameWithoutExtension(_map.Current).ToLower();
 
-				if(status.Old == (int)Status.LoadingMap)
+				if(status.Old == Status.LoadingMap)
 				{
 					if(map == "m02")
 						return new TimerAction[] { TimerAction.Start };
 				}
-				else if(status.Current == (int)Status.LoadingMap)
+				else if(status.Current == Status.LoadingMap)
 				{
 					if(map == "m02")
 						return new TimerAction[] { TimerAction.Reset };

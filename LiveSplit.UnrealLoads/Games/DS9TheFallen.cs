@@ -104,7 +104,6 @@ namespace LiveSplit.UnrealLoads.Games
 
 		public override TimerAction[] OnMapLoad(MemoryWatcherList watchers)
 		{
-			var status = (MemoryWatcher<int>)watchers["status"];
 			_map = (StringWatcher)watchers["map"];
 
 

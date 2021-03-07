@@ -83,24 +83,24 @@ namespace LiveSplit.UnrealLoads.Games
 			"inter14"
 		};
 
-		public override LoadMapDetour GetNewLoadMapDetour() => new LoadMapDetour_oldUnreal();
+		//public override LoadMapDetour GetNewLoadMapDetour() => new LoadMapDetour_oldUnreal();
 
-		public override SaveGameDetour GetNewSaveGameDetour() => new SaveGameDetour_oldUnreal();
+		//public override SaveGameDetour GetNewSaveGameDetour() => new SaveGameDetour_oldUnreal();
 
 		public override TimerAction[] OnUpdate(Process game, MemoryWatcherList watchers)
 		{
-			var status = (MemoryWatcher<int>)watchers["status"];
+			var status = (MemoryWatcher<Status>)watchers["status"];
 			if (status.Changed)
 			{
 				var mapW = (StringWatcher)watchers["map"];
 				var map = Path.GetFileNameWithoutExtension(mapW.Current).ToLower();
 
-				if (status.Old == (int)Status.LoadingMap)
+				if (status.Old == Status.LoadingMap)
 				{
 					if (map == "vortex2" || map == "duskfalls")
 						return new TimerAction[] { TimerAction.Start };
 				}
-				else if (status.Current == (int)Status.LoadingMap)
+				else if (status.Current == Status.LoadingMap)
 				{
 					if (map == "vortex2")
 						return new TimerAction[] { TimerAction.Reset };
