@@ -83,9 +83,9 @@ namespace LiveSplit.UnrealLoads.Games
 			"inter14"
 		};
 
-		//public override LoadMapDetour GetNewLoadMapDetour() => new LoadMapDetour_oldUnreal();
+		public override LoadMapDetour GetNewLoadMapDetour() => new LoadMapDetour_oldUnreal();
 
-		//public override SaveGameDetour GetNewSaveGameDetour() => new SaveGameDetour_oldUnreal();
+		public override SaveGameDetour GetNewSaveGameDetour() => new SaveGameDetour_oldUnreal();
 
 		public override TimerAction[] OnUpdate(Process game, MemoryWatcherList watchers)
 		{
