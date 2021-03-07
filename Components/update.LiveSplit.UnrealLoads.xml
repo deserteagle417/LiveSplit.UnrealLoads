@@ -1,4 +1,16 @@
 <updates>
+  <update version="1.8.2">
+    <files>
+      <file path="Components/LiveSplit.UnrealLoads.dll" status="changed"/>
+    </files>
+    <changelog>
+      <change>Fixed Star Trek: Deep Space Nine: The Fallen</change>
+      <change>Fixed Star Trek: Klingon Honor Guard</change>
+      <change>Fixed Mobile Forces</change>
+      <change>Fixed Unreal</change>
+      <change>Fixed X-COM Enforcer</change>
+    </changelog>
+  </update>
   <update version="1.8.1">
     <files>
       <file path="Components/LiveSplit.UnrealLoads.dll" status="changed"/>
