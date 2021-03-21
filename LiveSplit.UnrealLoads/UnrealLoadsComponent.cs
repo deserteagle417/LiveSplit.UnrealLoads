@@ -62,43 +62,47 @@ namespace LiveSplit.UnrealLoads
 
 		void _gameMemory_OnMapChange(object sender, string prevMap, string nextMap)
 		{
-			if (Settings.AutoSplitOnMapChange)
-			{
-				var shouldSplit = false;
-				if (Settings.Maps.Count == 0)
-					shouldSplit = true;
-				else
-				{
-					var leaveMap = Settings.Maps
-						.FirstOrDefault(map => map.SplitOnLeave && string.Equals(map.Name, prevMap, StringComparison.OrdinalIgnoreCase));
-
-					var enterMap = Settings.Maps
-						.FirstOrDefault(map => map.SplitOnEnter && string.Equals(map.Name, nextMap, StringComparison.OrdinalIgnoreCase));
-
-					if (leaveMap != null && ShouldSplitMap(leaveMap.Name))
-					{
-						shouldSplit = true;
-						_splitHistory.Add(prevMap);
-					}
-
-					if (enterMap != null && ShouldSplitMap(enterMap.Name))
-					{
-						shouldSplit = true;
-						_splitHistory.Add(nextMap);
-					}
-				}
-
-				if (shouldSplit)
-				{
-					_timer.Split();
-				}
-			}
-
 #if DEBUG
 			if (Settings.DbgShowMap)
 				MessageBox.Show(_state.Form, prevMap + " -> " + nextMap, "LiveSplit.UnrealLoads",
 					MessageBoxButtons.OK, MessageBoxIcon.Information);
 #endif
+
+			if (!Settings.AutoSplitOnMapChange)
+				return;
+
+			if (Settings.Maps.Count == 0)
+			{
+				_timer.Split();
+				return;
+			}
+
+			var shouldSplit = false;
+			var enterMap = Settings.Maps
+				.FirstOrDefault(map => string.Equals(map.Name, nextMap, StringComparison.OrdinalIgnoreCase));
+
+			// we don't want to split on leaving a map when entering an unknown map to avoid splitting on a save load
+			if (enterMap == null)
+				return;
+
+			if (enterMap.SplitOnEnter && ShouldSplitMap(enterMap.Name))
+			{
+				shouldSplit = true;
+				_splitHistory.Add(nextMap);
+			}
+
+			var leaveMap = Settings.Maps
+				.FirstOrDefault(map => string.Equals(map.Name, prevMap, StringComparison.OrdinalIgnoreCase));
+			if (leaveMap != null && leaveMap.SplitOnLeave && ShouldSplitMap(leaveMap.Name))
+			{
+				shouldSplit = true;
+				_splitHistory.Add(prevMap);
+			}
+
+			if (shouldSplit)
+			{
+				_timer.Split();
+			}
 		}
 
 		bool ShouldSplitMap(string mapName)
