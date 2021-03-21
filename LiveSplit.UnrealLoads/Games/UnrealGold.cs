@@ -8,7 +8,7 @@ namespace LiveSplit.UnrealLoads.Games
 {
 	class UnrealGold : GameSupport
 	{
-		public override HashSet<string> GameNames => new HashSet<string>
+		public override HashSet<string> GameNames { get; } = new HashSet<string>
 		{
 			"Unreal",
 			"Unreal Gold",
@@ -17,12 +17,12 @@ namespace LiveSplit.UnrealLoads.Games
 			"Return to Na Pali"
 		};
 
-		public override HashSet<string> ProcessNames => new HashSet<string>
+		public override HashSet<string> ProcessNames { get; } = new HashSet<string>
 		{
 			"unreal"
 		};
 
-		public override HashSet<string> Maps => new HashSet<string>
+		public override HashSet<string> Maps { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
 		{
 			"nyleve",
 			"dig",

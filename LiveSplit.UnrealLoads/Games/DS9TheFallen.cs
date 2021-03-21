@@ -10,18 +10,18 @@ namespace LiveSplit.UnrealLoads.Games
 {
 	class DS9TheFallen : GameSupport
 	{
-		public override HashSet<string> GameNames => new HashSet<string>
+		public override HashSet<string> GameNames { get; } = new HashSet<string>
 		{
 			"Star Trek: Deep Space Nine: The Fallen",
 			"Deep Space Nine The Fallen"
 		};
 
-		public override HashSet<string> ProcessNames => new HashSet<string>
+		public override HashSet<string> ProcessNames { get; } = new HashSet<string>
 		{
 			"ds9"
 		};
 
-		public override HashSet<string> Maps => new HashSet<string>
+		public override HashSet<string> Maps { get; } = new HashSet<string>
 		{
 			"cm01a_sw",
 			"cm01b_sw",

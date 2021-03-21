@@ -10,18 +10,18 @@ namespace LiveSplit.UnrealLoads.Games
 {
 	class WheelOfTime : GameSupport
 	{
-		public override HashSet<string> GameNames => new HashSet<string>
+		public override HashSet<string> GameNames { get; } = new HashSet<string>
 		{
 			"Wheel of Time",
 			"wot"
 		};
 
-		public override HashSet<string> ProcessNames => new HashSet<string>
+		public override HashSet<string> ProcessNames { get; } = new HashSet<string>
 		{
 			"wot"
 		};
 
-		public override HashSet<string> Maps => new HashSet<string>
+		public override HashSet<string> Maps { get; } = new HashSet<string> (StringComparer.OrdinalIgnoreCase)
 		{
 			"mission_02",
 			"mission_03",

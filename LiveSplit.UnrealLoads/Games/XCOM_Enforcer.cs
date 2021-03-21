@@ -8,7 +8,7 @@ namespace LiveSplit.UnrealLoads.Games
 {
 	class XCOM_Enforcer : GameSupport
 	{
-		public override HashSet<string> GameNames => new HashSet<string>
+		public override HashSet<string> GameNames { get; } = new HashSet<string>
 		{
 			"XCOM Enforcer",
 			"X-COM Enforcer",
@@ -16,14 +16,14 @@ namespace LiveSplit.UnrealLoads.Games
 			"X-COM: Enforcer"
 		};
 
-		public override HashSet<string> ProcessNames => new HashSet<string>
+		public override HashSet<string> ProcessNames { get; } = new HashSet<string>
 		{
 			"xcom"
 		};
 
 		StringWatcher _map;
 
-		public override HashSet<string> Maps => new HashSet<string>
+		public override HashSet<string> Maps { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
 		{
 			"..\\maps\\bonus01",
 			"..\\maps\\bonus02",

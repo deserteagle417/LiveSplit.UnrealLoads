@@ -8,20 +8,20 @@ namespace LiveSplit.UnrealLoads.Games
 {
 	class MobileForces : GameSupport
 	{
-		public override HashSet<string> GameNames => new HashSet<string>
+		public override HashSet<string> GameNames { get; } = new HashSet<string>
 		{
 			"Mobile Forces",
 			"MobileForces"
 		};
 
-		public override HashSet<string> ProcessNames => new HashSet<string>
+		public override HashSet<string> ProcessNames { get; } = new HashSet<string>
 		{
 			"mobileforces"
 		};
 
 		StringWatcher _map;
 
-		public override HashSet<string> Maps => new HashSet<string>
+		public override HashSet<string> Maps { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
 		{
 			"mf-airport",
 			"mf-carpark",

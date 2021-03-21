@@ -7,7 +7,7 @@ namespace LiveSplit.UnrealLoads.Games
 {
 	class HarryPotter3 : GameSupport
 	{
-		public override HashSet<string> GameNames => new HashSet<string>
+		public override HashSet<string> GameNames { get; } = new HashSet<string>
 		{
 			"Harry Potter 3",
 			"Harry Potter and the Prisoner of Azkaban",
@@ -15,12 +15,12 @@ namespace LiveSplit.UnrealLoads.Games
 			"HP 3"
 		};
 
-		public override HashSet<string> ProcessNames => new HashSet<string>
+		public override HashSet<string> ProcessNames { get; } = new HashSet<string>
 		{
 			"hppoa"
 		};
 
-		public override HashSet<string> Maps => new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+		public override HashSet<string> Maps { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
 		{
 			"hp3_adv1express",
 			"hp3_groundsdada",
