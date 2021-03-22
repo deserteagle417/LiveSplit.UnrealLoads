@@ -15,14 +15,13 @@ namespace LiveSplit.UnrealLoads
 	{
 		public override string ComponentName => "UnrealLoads";
 
-		public UnrealLoadsSettings Settings { get; set; }
+		private readonly IUnrealLoadsSettings Settings;
+		private readonly ITimerModel _timer;
+		private readonly IGameMemory _gameMemory;
+		private readonly LiveSplitState _state;
+		private readonly HashSet<string> _splitHistory;
 
-		TimerModel _timer;
-		GameMemory _gameMemory;
-		LiveSplitState _state;
-		HashSet<string> _splitHistory;
-
-		public UnrealLoadsComponent(LiveSplitState state)
+		public UnrealLoadsComponent(LiveSplitState state, ITimerModel timer, IGameMemory gameMemory, IUnrealLoadsSettings settings)
 		{
 			bool debug = false;
 #if DEBUG
@@ -31,14 +30,13 @@ namespace LiveSplit.UnrealLoads
 			Trace.WriteLine("[NoLoads] Using LiveSplit.UnrealLoads component version " + Assembly.GetExecutingAssembly().GetName().Version + " " + ((debug) ? "Debug" : "Release") + " build");
 
 			_state = state;
-			_timer = new TimerModel { CurrentState = state };
+			_timer = timer;
 			_splitHistory = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-			Settings = new UnrealLoadsSettings(_state);
+			Settings = settings;
 
 			_state.OnStart += _state_OnStart;
 
-			_gameMemory = new GameMemory();
+			_gameMemory = gameMemory;
 			_gameMemory.OnReset += gameMemory_OnReset;
 			_gameMemory.OnStart += gameMemory_OnStart;
 			_gameMemory.OnSplit += _gameMemory_OnSplit;
@@ -144,7 +142,7 @@ namespace LiveSplit.UnrealLoads
 
 		public override XmlNode GetSettings(XmlDocument document) => Settings.GetSettings(document);
 
-		public override Control GetSettingsControl(LayoutMode mode) => Settings;
+		public override Control GetSettingsControl(LayoutMode mode) => Settings.UserControl;
 
 		public override void SetSettings(XmlNode settings) => Settings.SetSettings(settings);
 

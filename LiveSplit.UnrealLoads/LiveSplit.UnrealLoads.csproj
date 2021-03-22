@@ -73,6 +73,8 @@
     <Compile Include="Games\UnrealGold.cs" />
     <Compile Include="Games\WheelOfTime.cs" />
     <Compile Include="Hooks.cs" />
+    <Compile Include="IGameMemory.cs" />
+    <Compile Include="IUnrealLoadsSettings.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="PE.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

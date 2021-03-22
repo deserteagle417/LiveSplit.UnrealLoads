@@ -11,7 +11,7 @@ using System.Xml;
 
 namespace LiveSplit.UnrealLoads
 {
-	public partial class UnrealLoadsSettings : UserControl
+	public partial class UnrealLoadsSettings : UserControl, IUnrealLoadsSettings
 	{
 		public bool AutoStart { get; set; }
 		public bool AutoReset { get; set; }
@@ -19,7 +19,9 @@ namespace LiveSplit.UnrealLoads
 		public bool AutoSplitOncePerMap { get; set; }
 		public bool DbgShowMap { get; set; }
 
-		public IList<Map> Maps => (IList<Map>) mapBindingSource.List;
+		public IList<Map> Maps => (IList<Map>)mapBindingSource.List;
+
+		Control IUnrealLoadsSettings.UserControl => this;
 
 		const bool DEFAULT_AUTOSTART = true;
 		const bool DEFAULT_AUTORESET = true;
@@ -27,9 +29,10 @@ namespace LiveSplit.UnrealLoads
 		const bool DEFAULT_AUTOSPLITONCEPERMAP = true;
 		const bool DEFAULT_SPLITONLEAVE = false;
 
-		LiveSplitState _state;
+		private readonly LiveSplitState _state;
+		private readonly IReadOnlyList<GameSupport> _gameSupportList;
 
-		public UnrealLoadsSettings(LiveSplitState state)
+		public UnrealLoadsSettings(LiveSplitState state, IEnumerable<GameSupport> gameSupportList)
 		{
 			Dock = DockStyle.Fill;
 			InitializeComponent();
@@ -38,9 +41,10 @@ namespace LiveSplit.UnrealLoads
 
 			dgvMapSet.EnabledChanged += DgvMapSet_EnabledChanged;
 
-			cbGame.DataSource = GameMemory.SupportedGames.Select(s => s.GetType())
+			_gameSupportList = gameSupportList.ToList();
+			cbGame.DataSource = gameSupportList.Select(s => s.GetType())
 				.OrderBy(t => t.Name)
-				.ToList();
+				.ToList(); ;
 			cbGame.DisplayMember = nameof(Type.Name);
 
 			chkAutoStart.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(AutoStart), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -56,7 +60,7 @@ namespace LiveSplit.UnrealLoads
 			AutoReset = DEFAULT_AUTORESET;
 			AutoSplitOnMapChange = DEFAULT_AUTOSPLITONMAPCHANGE;
 			AutoSplitOncePerMap = DEFAULT_AUTOSPLITONCEPERMAP;
-			cbGame.SelectedItem = SearchGameSupport(_state.Run.GameName)?.GetType() ?? GameMemory.SupportedGames[0].GetType();
+			cbGame.SelectedItem = SearchGameSupport(_state.Run.GameName)?.GetType() ?? gameSupportList.First()?.GetType();
 
 #if DEBUG
 			chkDbgShowMap.Visible = true;
@@ -86,11 +90,11 @@ namespace LiveSplit.UnrealLoads
 			}
 		}
 
-		static GameSupport SearchGameSupport(string name)
+		GameSupport SearchGameSupport(string name)
 		{
 			name = name.ToLowerInvariant();
 
-			var game = GameMemory.SupportedGames.FirstOrDefault(g =>
+			var game = _gameSupportList.FirstOrDefault(g =>
 				g.GetType().Name.ToLowerInvariant() == name
 					|| g.GameNames.Any(n => n.ToLowerInvariant() == name)
 			);
@@ -98,7 +102,7 @@ namespace LiveSplit.UnrealLoads
 			if (game != null)
 				return game;
 
-			return GameMemory.SupportedGames.FirstOrDefault(g =>
+			return _gameSupportList.FirstOrDefault(g =>
 				g.GameNames.Any(n => name.Contains(n.ToLowerInvariant()))
 			);
 		}
@@ -140,7 +144,7 @@ namespace LiveSplit.UnrealLoads
 				game = SearchGameSupport(settings["Game"].InnerText);
 
 			if (game == null)
-				game = SearchGameSupport(_state.Run.GameName) ?? GameMemory.SupportedGames[0];
+				game = SearchGameSupport(_state.Run.GameName) ?? _gameSupportList.First();
 
 			cbGame.SelectedItem = game.GetType();
 
@@ -179,7 +183,7 @@ namespace LiveSplit.UnrealLoads
 					}
 				}
 			}
-        }
+		}
 
 		void btnAddMap_Click(object sender, EventArgs e)
 		{
@@ -196,14 +200,14 @@ namespace LiveSplit.UnrealLoads
 		{
 			foreach (DataGridViewRow row in dgvMapSet.SelectedRows)
 			{
-				Map map = (Map) row.DataBoundItem;
+				Map map = (Map)row.DataBoundItem;
 				Maps.Remove(map);
 			}
 		}
 
 		void cbGame_SelectedIndexChanged(object sender, EventArgs e)
 		{
-            var selected = (GameSupport)Activator.CreateInstance((Type)cbGame.SelectedItem);
+			var selected = (GameSupport)Activator.CreateInstance((Type)cbGame.SelectedItem);
 
 			Maps.Clear();
 			if (selected?.Maps != null)
