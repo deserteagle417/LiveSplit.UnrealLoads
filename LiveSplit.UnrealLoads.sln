@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveSplit.UnrealLoads", "LiveSplit.UnrealLoads\LiveSplit.UnrealLoads.csproj", "{2307542D-1ACA-4B3C-A9CE-DCD1EDC6AA23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveSplit.UnrealLoads.Tests", "LiveSplit.UnrealLoads.Tests\LiveSplit.UnrealLoads.Tests.csproj", "{9B44BAC1-C872-4089-8148-228E397B223D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +17,15 @@ Global
 		{2307542D-1ACA-4B3C-A9CE-DCD1EDC6AA23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2307542D-1ACA-4B3C-A9CE-DCD1EDC6AA23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2307542D-1ACA-4B3C-A9CE-DCD1EDC6AA23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B44BAC1-C872-4089-8148-228E397B223D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B44BAC1-C872-4089-8148-228E397B223D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B44BAC1-C872-4089-8148-228E397B223D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B44BAC1-C872-4089-8148-228E397B223D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7BDDD8A8-62E2-4F9C-9FCD-9E1A30C8987A}
 	EndGlobalSection
 EndGlobal
