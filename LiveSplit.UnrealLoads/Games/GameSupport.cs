@@ -23,7 +23,7 @@ namespace LiveSplit.UnrealLoads.Games
 		UnpauseGameTime
 	}
 
-	abstract class GameSupport
+	public abstract class GameSupport
 	{
 		public abstract HashSet<string> GameNames { get; }
 

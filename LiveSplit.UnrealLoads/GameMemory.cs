@@ -19,30 +19,12 @@ namespace LiveSplit.UnrealLoads
 		Saving = 2
 	}
 
-	class GameMemory
+	public class GameMemory : IGameMemory
 	{
 		public const int SLEEP_TIME = 15;
 
-		public static readonly GameSupport[] SupportedGames = new GameSupport[]
-		{
-			new HarryPotter1(),
-			new HarryPotter2(),
-			new HarryPotter3(),
-			new Shrek2(),
-			new WheelOfTime(),
-			new UnrealGold(),
-			new SplinterCell3(),
-			new SplinterCell(),
-			new MobileForces(),
-			new XCOM_Enforcer(),
-			new DS9TheFallen(),
-			new KlingonHonorGuard()
-		};
-
-		public static readonly string[] SupportedProcessesNames =
-			SupportedGames.SelectMany(g => g.ProcessNames
-				.Select(pName => pName.ToLower()))
-				.ToArray();
+		readonly GameSupport[] SupportedGames;
+		readonly string[] SupportedProcessesNames;
 
 		public event EventHandler OnReset;
 		public event EventHandler OnStart;
@@ -50,9 +32,8 @@ namespace LiveSplit.UnrealLoads
 		public event EventHandler OnLoadStarted;
 		public event EventHandler OnLoadEnded;
 		public event MapChangeEventHandler OnMapChange;
-		public delegate void MapChangeEventHandler(object sender, string prevMap, string nextMap);
 
-		public GameSupport Game { get; private set; }
+		private GameSupport Game { get; set; }
 
 		Task _thread;
 		CancellationTokenSource _cancelSource;
@@ -71,8 +52,13 @@ namespace LiveSplit.UnrealLoads
 
 		readonly int MAP_SIZE = Encoding.Unicode.GetMaxByteCount(260); // MAX_PATH == 260
 
-		public GameMemory()
+		public GameMemory(IEnumerable<GameSupport> supportedGames)
 		{
+			SupportedGames = supportedGames.ToArray();
+			SupportedProcessesNames = SupportedGames.SelectMany(g => g.ProcessNames
+				.Select(pName => pName.ToLower()))
+				.ToArray();
+
 			_ignorePIDs = new HashSet<int>();
 			_watchers = new MemoryWatcherList();
 		}
