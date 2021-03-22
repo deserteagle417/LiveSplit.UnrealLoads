@@ -79,11 +79,7 @@ namespace LiveSplit.UnrealLoads
 			var enterMap = Settings.Maps
 				.FirstOrDefault(map => string.Equals(map.Name, nextMap, StringComparison.OrdinalIgnoreCase));
 
-			// we don't want to split on leaving a map when entering an unknown map to avoid splitting on a save load
-			if (enterMap == null)
-				return;
-
-			if (enterMap.SplitOnEnter && ShouldSplitMap(enterMap.Name))
+			if (enterMap != null && enterMap.SplitOnEnter && ShouldSplitMap(enterMap.Name))
 			{
 				shouldSplit = true;
 				_splitHistory.Add(nextMap);

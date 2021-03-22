@@ -133,8 +133,8 @@ namespace LiveSplit.UnrealLoads
 
 							Debug.WriteLine($"Map changed to {_map.Current}, Type: {extension}");
 
-							if (Game.MapExtension == null ||
-							extension.Equals(Game.MapExtension, StringComparison.OrdinalIgnoreCase))
+							if ((Game.Maps.Count == 0 || Game.Maps.Contains(mapname))
+								&& (Game.MapExtension == null || extension.Equals(Game.MapExtension, StringComparison.OrdinalIgnoreCase)))
 							{
 								prevMap = map;
 								map = mapname;
