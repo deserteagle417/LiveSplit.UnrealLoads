@@ -36,40 +36,6 @@ namespace LiveSplit.UnrealLoads.Tests
 			_sut = new UnrealLoadsComponent(_state, _timer, _gameMemory, _settings);
 		}
 
-		[Theory, AutoData]
-		public void WhenMapChange_EnteringEnabledMapAndExitingUnlistedMap_ShouldSplit( Map enterMap, string prevMap)
-		{
-			_settings.Maps.Add(enterMap);
-			enterMap.SplitOnEnter = true;
-			enterMap.SplitOnLeave = false;
-
-
-			string nextMap = enterMap.Name.ToUpperInvariant();
-			_gameMemory.OnMapChange += Raise.Event<MapChangeEventHandler>(_gameMemory, prevMap, nextMap);
-
-
-			_timer.ReceivedWithAnyArgs(1).Split();
-        }
-
-		[Theory, AutoData]
-		public void WhenMapChange_LeavingEnabledMapAndEnteringListedMap_DifferentLettercase_ShouldSplit(Map exitMap, Map enterMap)
-		{
-			_settings.Maps.Add(exitMap);
-			_settings.Maps.Add(enterMap);
-			exitMap.SplitOnLeave = true;
-			exitMap.SplitOnEnter = false;
-			enterMap.SplitOnLeave = false;
-			enterMap.SplitOnEnter = false;
-
-
-			string prevMap = exitMap.Name.ToUpperInvariant();
-			string nextMap = enterMap.Name.ToUpperInvariant();
-			_gameMemory.OnMapChange += Raise.Event<MapChangeEventHandler>(_gameMemory, prevMap, nextMap);
-
-
-			_timer.ReceivedWithAnyArgs(1).Split();
-        }
-
         [Theory, AutoData]
         public void WhenMapChange_LeavingEnabledMapAndEnteringUnlistedMap_ShouldNotSplit(Map exitMap, string nextMap)
         {
