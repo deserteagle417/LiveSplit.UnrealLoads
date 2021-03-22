@@ -1,12 +1,12 @@
 <updates>
-  <update version="1.8.4">
+  <!--<update version="1.8.4">
     <files>
       <file path="Components/LiveSplit.UnrealLoads.dll" status="changed"/>
     </files>
     <changelog>
       <change>Fix "Leave" autosplit being triggered on save loads: Map exit splits are now triggered only when entering a map that exists in the settings.</change>
     </changelog>
-  </update>
+  </update>-->
   <update version="1.8.3">
     <files>
       <file path="Components/LiveSplit.UnrealLoads.dll" status="changed"/>
