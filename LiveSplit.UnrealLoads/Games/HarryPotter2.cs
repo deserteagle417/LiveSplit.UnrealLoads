@@ -68,6 +68,7 @@ namespace LiveSplit.UnrealLoads.Games
 		};
 
 		private readonly MemoryWatcher<bool> _isSkippingCut = new MemoryWatcher<bool>(new DeepPointer("Engine.dll", 0x2E2DFC, 0x5C));
+		private readonly MemoryWatcher<bool> _isGamePaused = new MemoryWatcher<bool>(new DeepPointer("Engine.dll", 0x2E2DFC, 0x50));
 		private readonly HashSet<int> _moduleMemorySizes = new HashSet<int>
 		{
 			704512,
@@ -87,6 +88,7 @@ namespace LiveSplit.UnrealLoads.Games
 		public override TimerAction[] OnUpdate(Process game, MemoryWatcherList watchers)
 		{
 			_isSkippingCut.Update(game);
+			_isGamePaused.Update(game);
 			var map = (StringWatcher)watchers["map"];
 
 			if (_isSkippingCut.Changed && _isSkippingCut.Current
@@ -100,7 +102,7 @@ namespace LiveSplit.UnrealLoads.Games
 
 		public override bool? IsLoading(MemoryWatcherList watchers)
 		{
-			if (_isSkippingCut.Current)
+			if (_isSkippingCut.Current && !_isGamePaused.Current)
 				return true;
 
 			return null;
