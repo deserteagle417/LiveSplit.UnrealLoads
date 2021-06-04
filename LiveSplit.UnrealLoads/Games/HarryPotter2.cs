@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Management;
 
 namespace LiveSplit.UnrealLoads.Games
 {
@@ -67,7 +68,6 @@ namespace LiveSplit.UnrealLoads.Games
 			"Transition"
 		};
 
-		private readonly MemoryWatcher<bool> _isSkippingCut = new MemoryWatcher<bool>(new DeepPointer("Engine.dll", 0x2E2DFC, 0x5C));
 		private readonly HashSet<int> _moduleMemorySizes = new HashSet<int>
 		{
 			704512,
@@ -84,39 +84,32 @@ namespace LiveSplit.UnrealLoads.Games
 			return IdentificationResult.Failure;
 		}
 
-		public override TimerAction[] OnUpdate(Process game, MemoryWatcherList watchers)
-		{
-			_isSkippingCut.Update(game);
-			var map = (StringWatcher)watchers["map"];
-
-			if (_isSkippingCut.Changed && _isSkippingCut.Current
-				&& (string.IsNullOrEmpty(map.Old) || map.Current.Equals("privetdr.unr", StringComparison.OrdinalIgnoreCase)))
-			{
-				return new TimerAction[] { TimerAction.Start };
-			}
-
-			return null;
-		}
-
-		public override bool? IsLoading(MemoryWatcherList watchers)
-		{
-			if (_isSkippingCut.Current)
-				return true;
-
-			return null;
-		}
-
 		static string GetCommandLine(Process process)
 		{
-			var commandLine = new StringBuilder();
-			using (var searcher = new System.Management.ManagementObjectSearcher(
+			using (var searcher = new ManagementObjectSearcher(
 				"SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + process.Id))
 			{
+				StringBuilder commandLine = new StringBuilder();
 				foreach (var @object in searcher.Get())
-					commandLine.Append(@object["CommandLine"] + " ");
+					commandLine.Append(@object["CommandLine"]).Append(" ");
+				return commandLine.ToString();
+			}
+		}
+
+		public override TimerAction[] OnMapLoad(MemoryWatcherList watchers)
+		{
+			var map = (StringWatcher)watchers["map"];
+
+			if (map != null)
+			{
+				if (map.Current.Equals("privetdr.unr", StringComparison.OrdinalIgnoreCase)
+					&& map.Old.Equals("privetdr.unr", StringComparison.OrdinalIgnoreCase))
+				{
+					return new TimerAction[] { TimerAction.Start };
+				}
 			}
 
-			return commandLine.ToString();
+			return null;
 		}
 
 		public override TimerAction[] OnDetach(Process game)
