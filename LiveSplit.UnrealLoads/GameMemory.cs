@@ -226,6 +226,7 @@ namespace LiveSplit.UnrealLoads
 			Process game = null;
 
 			var processes = SupportedProcessesNames.SelectMany(n => Process.GetProcessesByName(n))
+				.Where(x => !x.HasExited)
 				.OrderByDescending(p => p.StartTime);
 
 			foreach (var p in processes)
