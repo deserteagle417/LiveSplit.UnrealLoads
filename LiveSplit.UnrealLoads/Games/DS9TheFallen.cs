@@ -21,7 +21,7 @@ namespace LiveSplit.UnrealLoads.Games
 			"ds9"
 		};
 
-		public override HashSet<string> Maps { get; } = new HashSet<string>
+		public override HashSet<string> Maps { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
 		{
 			"cm01a_sw",
 			"cm01b_sw",

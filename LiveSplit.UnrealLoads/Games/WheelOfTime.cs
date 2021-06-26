@@ -23,6 +23,9 @@ namespace LiveSplit.UnrealLoads.Games
 
 		public override HashSet<string> Maps { get; } = new HashSet<string> (StringComparer.OrdinalIgnoreCase)
 		{
+			"Tutorial",
+			"Tutorial_Citadel",
+			"mission_01",
 			"mission_02",
 			"mission_03",
 			"mission_04",
@@ -37,11 +40,13 @@ namespace LiveSplit.UnrealLoads.Games
 			"mission_10",
 			"mission_12a",
 			"mission_12b",
+			"mission_13",
 			"mission_15",
 			"mission_16",
 			"mission_17",
 			"mission_18",
-			"mission_13"
+			"WheelOfTime",
+			"Credits",
 		};
 
 		List<KeyOrButton>	_hideMissionObjectivesKeys;

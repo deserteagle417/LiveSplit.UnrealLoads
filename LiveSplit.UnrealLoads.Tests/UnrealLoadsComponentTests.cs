@@ -36,54 +36,6 @@ namespace LiveSplit.UnrealLoads.Tests
 			_sut = new UnrealLoadsComponent(_state, _timer, _gameMemory, _settings);
 		}
 
-		[Theory, AutoData]
-		public void WhenMapChange_EnteringEnabledMapAndExitingUnlistedMap_ShouldSplit( Map enterMap, string prevMap)
-		{
-			_settings.Maps.Add(enterMap);
-			enterMap.SplitOnEnter = true;
-			enterMap.SplitOnLeave = false;
-
-
-			string nextMap = enterMap.Name.ToUpperInvariant();
-			_gameMemory.OnMapChange += Raise.Event<MapChangeEventHandler>(_gameMemory, prevMap, nextMap);
-
-
-			_timer.ReceivedWithAnyArgs(1).Split();
-        }
-
-		[Theory, AutoData]
-		public void WhenMapChange_LeavingEnabledMapAndEnteringListedMap_DifferentLettercase_ShouldSplit(Map exitMap, Map enterMap)
-		{
-			_settings.Maps.Add(exitMap);
-			_settings.Maps.Add(enterMap);
-			exitMap.SplitOnLeave = true;
-			exitMap.SplitOnEnter = false;
-			enterMap.SplitOnLeave = false;
-			enterMap.SplitOnEnter = false;
-
-
-			string prevMap = exitMap.Name.ToUpperInvariant();
-			string nextMap = enterMap.Name.ToUpperInvariant();
-			_gameMemory.OnMapChange += Raise.Event<MapChangeEventHandler>(_gameMemory, prevMap, nextMap);
-
-
-			_timer.ReceivedWithAnyArgs(1).Split();
-        }
-
-        [Theory, AutoData]
-        public void WhenMapChange_LeavingEnabledMapAndEnteringUnlistedMap_ShouldNotSplit(Map exitMap, string nextMap)
-        {
-			_settings.Maps.Add(exitMap);
-			exitMap.SplitOnLeave = true;
-
-
-			string prevMap = exitMap.Name.ToUpperInvariant();
-			_gameMemory.OnMapChange += Raise.Event<MapChangeEventHandler>(_gameMemory, prevMap, nextMap);
-
-
-			_timer.DidNotReceiveWithAnyArgs().Split();
-        }
-
 		[Theory, CombinatorialData]
 		public void WhenMapChangeTwice_EmptyMapList_ShouldSplitTwiceWithAnySplitHistorySetting(bool splitOnlyOnce)
 		{
@@ -135,21 +87,28 @@ namespace LiveSplit.UnrealLoads.Tests
 				new Map(enterMapName) { SplitOnEnter = true },
 				splitonlyonce
 			};
-			// 2. leaving a listed map, entering an enabled map
+			// 2. leaving an enabled map, entering an unlisted map
+			yield return new object[]
+			{
+				new Map(exitMapName) { SplitOnLeave = true },
+				null,
+				splitonlyonce
+			};
+			// 3. leaving a listed map, entering an enabled map
 			yield return new object[]
 			{
 				new Map(exitMapName),
 				new Map(enterMapName) { SplitOnEnter = true },
 				splitonlyonce
 			};
-			// 3. leaving an enabled map, entering a listed map
+			// 4. leaving an enabled map, entering a listed map
 			yield return new object[]
 			{
 				new Map(exitMapName) { SplitOnLeave = true },
 				new Map(enterMapName),
 				splitonlyonce
 			};
-			// 4. leaving and entering enabled maps
+			// 5. leaving and entering enabled maps
 			yield return new object[]
 			{
 				new Map(exitMapName) { SplitOnLeave = true },
