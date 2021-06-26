@@ -36,6 +36,7 @@ namespace LiveSplit.UnrealLoads.Games
 			"dr12",
 			"klingon",
 			"m03",
+			"m02",
 			"m04a",
 			"m04b",
 			"m05",
