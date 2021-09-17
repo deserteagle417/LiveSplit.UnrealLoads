@@ -1,4 +1,12 @@
 <updates>
+  <update version="1.9">
+    <files>
+      <file path="Components/LiveSplit.UnrealLoads.dll" status="changed"/>
+    </files>
+    <changelog>
+      <change>Added The Heat of War support (by marczeslaw)</change>
+    </changelog>
+  </update>
   <update version="1.8.5">
     <files>
       <file path="Components/LiveSplit.UnrealLoads.dll" status="changed"/>
