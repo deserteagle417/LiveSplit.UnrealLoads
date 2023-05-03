@@ -1,8 +1,8 @@
 ﻿using LiveSplit.ComponentUtil;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System;
 
 namespace LiveSplit.UnrealLoads.Games
 {
@@ -83,9 +83,12 @@ namespace LiveSplit.UnrealLoads.Games
 			"inter14"
 		};
 
-		public override LoadMapDetour GetNewLoadMapDetour() => new LoadMapDetour_oldUnreal();
+		private LoadMapDetour _loadMapDetour = null;
+		private SaveGameDetour _saveMapDetour = null;
 
-		public override SaveGameDetour GetNewSaveGameDetour() => new SaveGameDetour_oldUnreal();
+		public override LoadMapDetour GetNewLoadMapDetour() => _loadMapDetour;
+
+		public override SaveGameDetour GetNewSaveGameDetour() => _saveMapDetour;
 
 		public override TimerAction[] OnUpdate(Process game, MemoryWatcherList watchers)
 		{
@@ -108,6 +111,35 @@ namespace LiveSplit.UnrealLoads.Games
 			}
 			return null;
 		}
+
+		public override IdentificationResult IdentifyProcess(Process process)
+		{
+			var oldUnrealLoadMapDetour = new LoadMapDetour_oldUnreal();
+			var oldUnrealSaveGameDetour = new SaveGameDetour_oldUnreal();
+
+			var unrealLoadMapDetour = new LoadMapDetour();
+			var unrealSaveGameDetour = new SaveGameDetour();
+			if (CanFindExportedFunc(oldUnrealLoadMapDetour, process)
+				&& CanFindExportedFunc(oldUnrealSaveGameDetour, process))
+			{
+				_loadMapDetour = oldUnrealLoadMapDetour;
+				_saveMapDetour = oldUnrealSaveGameDetour;
+			}
+			else if (CanFindExportedFunc(unrealLoadMapDetour, process)
+				&& CanFindExportedFunc(unrealSaveGameDetour, process))
+			{
+				_loadMapDetour = unrealLoadMapDetour;
+				_saveMapDetour = unrealSaveGameDetour;
+			}
+			else
+			{
+				return IdentificationResult.Failure;
+			}
+
+			return IdentificationResult.Success;
+		}
+
+		private static bool CanFindExportedFunc(Detour detour, Process process) => detour.FindExportedFunc(process) != IntPtr.Zero;
 	}
 
 	public class LoadMapDetour_oldUnreal : LoadMapDetour
