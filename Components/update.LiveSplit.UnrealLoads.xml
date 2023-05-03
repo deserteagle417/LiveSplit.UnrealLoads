@@ -1,4 +1,12 @@
 <updates>
+  <update version="1.9.1">
+    <files>
+      <file path="Components/LiveSplit.UnrealLoads.dll" status="changed"/>
+    </files>
+    <changelog>
+      <change>Added support for both Unreal Gold v227i and v226</change>
+    </changelog>
+  </update>
   <update version="1.9">
     <files>
       <file path="Components/LiveSplit.UnrealLoads.dll" status="changed"/>
